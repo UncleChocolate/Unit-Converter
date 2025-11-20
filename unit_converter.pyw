@@ -1,0 +1,123 @@
+import tkinter as tk
+from tkinter import ttk, messagebox
+import conversions
+
+class UnitConverterApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Unit Converter")
+        # self.root.geometry("600x400") # Let it resize automatically
+
+        self.create_widgets()
+
+    def create_widgets(self):
+        # Main Frame
+        main_frame = ttk.Frame(self.root, padding="20")
+        main_frame.pack(fill=tk.BOTH, expand=True)
+
+        # Headers
+        ttk.Label(main_frame, text="English / Imperial", font=("Arial", 12, "bold")).grid(row=0, column=1, padx=10, pady=10)
+        ttk.Label(main_frame, text="Metric / SI", font=("Arial", 12, "bold")).grid(row=0, column=2, padx=10, pady=10)
+
+        # Conversion Rows
+        self.rows = []
+        
+        # Format: (Label1, Label2, ConvertFunc1to2, ConvertFunc2to1, Precision1, Precision2)
+        self.conversions_setup = [
+            ("Feet", "Meters", conversions.feet_to_meters, conversions.meters_to_feet, 4, 4),
+            ("Pounds", "Kilograms", conversions.pounds_to_kilograms, conversions.kilograms_to_pounds, 4, 4),
+            ("Pounds", "Grams", conversions.pounds_to_grams, conversions.grams_to_pounds, 4, 2),
+            ("Ounces", "Grams", conversions.ounces_to_grams, conversions.grams_to_ounces, 4, 2),
+            ("Inches", "Millimeters", conversions.inches_to_millimeters, conversions.millimeters_to_inches, 4, 4),
+            ("Fahrenheit", "Celsius", conversions.fahrenheit_to_celsius, conversions.celsius_to_fahrenheit, 2, 2),
+            ("Degrees", "Radians", conversions.degrees_to_radians, conversions.radians_to_degrees, 4, 4),
+            ("PSI", "Bar", conversions.psi_to_bar, conversions.bar_to_psi, 4, 4)
+        ]
+
+        for i, (label1, label2, func1, func2, prec1, prec2) in enumerate(self.conversions_setup):
+            row_idx = i + 1
+            
+            # Labels
+            ttk.Label(main_frame, text=label1).grid(row=row_idx, column=0, sticky="e", padx=5, pady=5)
+            ttk.Label(main_frame, text=label2).grid(row=row_idx, column=3, sticky="w", padx=5, pady=5)
+
+            # Entries
+            var1 = tk.StringVar()
+            var2 = tk.StringVar()
+            
+            entry1 = ttk.Entry(main_frame, textvariable=var1, width=15)
+            entry2 = ttk.Entry(main_frame, textvariable=var2, width=15)
+            
+            entry1.grid(row=row_idx, column=1, padx=5, pady=5)
+            entry2.grid(row=row_idx, column=2, padx=5, pady=5)
+
+            # Store row data
+            row_data = {
+                "var1": var1,
+                "var2": var2,
+                "func1": func1, # 1 -> 2
+                "func2": func2, # 2 -> 1
+                "prec1": prec1,
+                "prec2": prec2,
+                "updating": False # Flag to prevent recursive updates
+            }
+            self.rows.append(row_data)
+
+            # Bind events
+            # Use lambda with default argument to capture current row_data
+            entry1.bind("<KeyRelease>", lambda event, rd=row_data: self.on_entry1_change(rd))
+            entry2.bind("<KeyRelease>", lambda event, rd=row_data: self.on_entry2_change(rd))
+
+    def on_entry1_change(self, row_data):
+        if row_data["updating"]: return
+        
+        val_str = row_data["var1"].get()
+        if not val_str:
+            row_data["updating"] = True
+            row_data["var2"].set("")
+            row_data["updating"] = False
+            return
+
+        try:
+            val = float(val_str)
+            result = row_data["func1"](val)
+            
+            row_data["updating"] = True
+            # Special case for Inches (which is var1 in Inches->MM)
+            # Wait, user asked for Inches accuracy to 4 decimal places. 
+            # If Inches is var1, we are converting TO MM. 
+            # If MM is var2, we convert TO Inches.
+            # The precision stored is for the OUTPUT.
+            
+            # Actually, let's just use the stored precision for the target field
+            prec = row_data["prec2"]
+            row_data["var2"].set(f"{result:.{prec}f}")
+            row_data["updating"] = False
+        except ValueError:
+            pass # Ignore invalid input while typing
+
+    def on_entry2_change(self, row_data):
+        if row_data["updating"]: return
+        
+        val_str = row_data["var2"].get()
+        if not val_str:
+            row_data["updating"] = True
+            row_data["var1"].set("")
+            row_data["updating"] = False
+            return
+
+        try:
+            val = float(val_str)
+            result = row_data["func2"](val)
+            
+            row_data["updating"] = True
+            prec = row_data["prec1"]
+            row_data["var1"].set(f"{result:.{prec}f}")
+            row_data["updating"] = False
+        except ValueError:
+            pass
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = UnitConverterApp(root)
+    root.mainloop()
