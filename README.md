@@ -26,8 +26,9 @@ A simple and efficient Unit Converter application built with Python and Tkinter.
     ```
 3.  Run the application:
     ```bash
-    python unit_converter_app.py
+    python unit_converter.pyw
     ```
+    *Note: `unit_converter.pyw` is a standalone file and can be shared/run independently.*
 
 ### Running the Executable
 1.  Download `UnitConverter.exe` from the repository.
