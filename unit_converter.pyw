@@ -1,6 +1,54 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-import conversions
+import math
+
+def meters_to_feet(meters):
+    return meters * 3.28084
+
+def feet_to_meters(feet):
+    return feet / 3.28084
+
+def kilograms_to_pounds(kg):
+    return kg * 2.20462
+
+def pounds_to_kilograms(lbs):
+    return lbs / 2.20462
+
+def grams_to_pounds(g):
+    return g * 0.00220462
+
+def pounds_to_grams(lbs):
+    return lbs / 0.00220462
+
+def ounces_to_grams(oz):
+    return oz * 28.3495
+
+def grams_to_ounces(g):
+    return g / 28.3495
+
+def inches_to_millimeters(inches):
+    return inches * 25.4
+
+def millimeters_to_inches(mm):
+    return mm / 25.4
+
+def celsius_to_fahrenheit(c):
+    return (c * 9/5) + 32
+
+def fahrenheit_to_celsius(f):
+    return (f - 32) * 5/9
+
+def degrees_to_radians(deg):
+    return deg * (math.pi / 180)
+
+def radians_to_degrees(rad):
+    return rad * (180 / math.pi)
+
+def psi_to_bar(psi):
+    return psi * 0.0689476
+
+def bar_to_psi(bar):
+    return bar / 0.0689476
 
 class UnitConverterApp:
     def __init__(self, root):
@@ -24,14 +72,14 @@ class UnitConverterApp:
         
         # Format: (Label1, Label2, ConvertFunc1to2, ConvertFunc2to1, Precision1, Precision2)
         self.conversions_setup = [
-            ("Feet", "Meters", conversions.feet_to_meters, conversions.meters_to_feet, 4, 4),
-            ("Pounds", "Kilograms", conversions.pounds_to_kilograms, conversions.kilograms_to_pounds, 4, 4),
-            ("Pounds", "Grams", conversions.pounds_to_grams, conversions.grams_to_pounds, 4, 2),
-            ("Ounces", "Grams", conversions.ounces_to_grams, conversions.grams_to_ounces, 4, 2),
-            ("Inches", "Millimeters", conversions.inches_to_millimeters, conversions.millimeters_to_inches, 4, 4),
-            ("Fahrenheit", "Celsius", conversions.fahrenheit_to_celsius, conversions.celsius_to_fahrenheit, 2, 2),
-            ("Degrees", "Radians", conversions.degrees_to_radians, conversions.radians_to_degrees, 4, 4),
-            ("PSI", "Bar", conversions.psi_to_bar, conversions.bar_to_psi, 4, 4)
+            ("Feet", "Meters", feet_to_meters, meters_to_feet, 4, 4),
+            ("Pounds", "Kilograms", pounds_to_kilograms, kilograms_to_pounds, 4, 4),
+            ("Pounds", "Grams", pounds_to_grams, grams_to_pounds, 4, 2),
+            ("Ounces", "Grams", ounces_to_grams, grams_to_ounces, 4, 2),
+            ("Inches", "Millimeters", inches_to_millimeters, millimeters_to_inches, 4, 4),
+            ("Fahrenheit", "Celsius", fahrenheit_to_celsius, celsius_to_fahrenheit, 2, 2),
+            ("Degrees", "Radians", degrees_to_radians, radians_to_degrees, 4, 4),
+            ("PSI", "Bar", psi_to_bar, bar_to_psi, 4, 4)
         ]
 
         for i, (label1, label2, func1, func2, prec1, prec2) in enumerate(self.conversions_setup):
