@@ -26,6 +26,18 @@ def ounces_to_grams(oz):
 def grams_to_ounces(g):
     return g / 28.3495
 
+def newtons_to_grams(n):
+    return n * 101.971621
+
+def grams_to_newtons(g):
+    return g / 101.971621
+
+def pounds_to_newtons(lbs):
+    return lbs * 4.4482216
+
+def newtons_to_pounds(n):
+    return n / 4.4482216
+
 def inches_to_millimeters(inches):
     return inches * 25.4
 
@@ -49,6 +61,8 @@ def psi_to_bar(psi):
 
 def bar_to_psi(bar):
     return bar / 0.0689476
+
+
 
 class UnitConverterApp:
     def __init__(self, root):
@@ -74,12 +88,14 @@ class UnitConverterApp:
         self.conversions_setup = [
             ("Feet", "Meters", feet_to_meters, meters_to_feet, 4, 4),
             ("Pounds", "Kilograms", pounds_to_kilograms, kilograms_to_pounds, 4, 4),
+            ("Pounds", "Newtons", pounds_to_newtons, newtons_to_pounds, 4, 4),
             ("Pounds", "Grams", pounds_to_grams, grams_to_pounds, 4, 2),
+            ("Newtons", "Grams", newtons_to_grams, grams_to_newtons, 4, 4),
             ("Ounces", "Grams", ounces_to_grams, grams_to_ounces, 4, 2),
             ("Inches", "Millimeters", inches_to_millimeters, millimeters_to_inches, 4, 4),
             ("Fahrenheit", "Celsius", fahrenheit_to_celsius, celsius_to_fahrenheit, 2, 2),
             ("Degrees", "Radians", degrees_to_radians, radians_to_degrees, 4, 4),
-            ("PSI", "Bar", psi_to_bar, bar_to_psi, 4, 4)
+            ("PSI", "Bar", psi_to_bar, bar_to_psi, 4, 4),
         ]
 
         for i, (label1, label2, func1, func2, prec1, prec2) in enumerate(self.conversions_setup):
